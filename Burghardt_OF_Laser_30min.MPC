@@ -1,0 +1,33 @@
+\Burghardt Lab, TPH OF Protocol- based on Kash Lab 30 min protocol
+\April 10 2017
+\OF: 30 min, 3, 10-min epochs of alternating Laser OFF and Laser ON
+
+
+\Outputs
+^Laser = 5
+
+
+
+S.S.1,
+
+S1,
+    #START: ---> S2
+
+S2,
+    10': ON ^Laser ---> S3
+
+S3,
+    10': OFF ^Laser ---> S4
+
+S4,
+    10': ---> STOPABORTFLUSH
+
+
+
+S.S.2,
+S1,
+    #START: ---> S2
+
+S2,
+    1": ADD G; SHOW 2, Session Time, G ---> S2
+

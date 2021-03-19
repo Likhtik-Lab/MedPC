@@ -1,0 +1,22 @@
+\Burghardt Lab, TPH EPM/OF Protocol- based on Kash Lab 5 min protocol
+\April 5 2017
+\EPM: 5 min - laser ON throughout trial
+
+
+\Outputs
+^Laser = 5
+
+
+S.S.1,
+S1,
+    #START: ON ^Laser ---> S2
+
+S2,
+    5': OFF ^Laser ---> STOPABORTFLUSH
+
+S.S.2,
+S1,
+    #START: ---> S2
+
+S2,
+    1": ADD G; SHOW 2, Session Time, G ---> S2

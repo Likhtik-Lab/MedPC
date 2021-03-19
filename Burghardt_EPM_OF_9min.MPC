@@ -1,0 +1,33 @@
+\Burghardt Lab, TPH EPM/OF Protocol- based on Alvaro's 9 min protocol
+\April 5 2017
+\EPM/OF: 9 min, 3, 3-min epochs of alternating Laser ON and Laser OFF
+
+
+\Outputs
+^Laser = 5
+
+
+
+S.S.1,
+
+S1,
+    #START: ---> S2
+
+S2,
+    180": ON ^Laser ---> S3
+
+S3,
+    180": OFF ^Laser ---> S4
+
+S4,
+    180": ---> STOPABORTFLUSH
+
+
+
+S.S.2,
+S1,
+    #START: ---> S2
+
+S2,
+    1": ADD G; SHOW 2, Session Time, G ---> S2
+

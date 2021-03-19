@@ -1,0 +1,17 @@
+\mA testing for gridfloor
+\will keep on the grid floor until manually ended
+
+\August 22, 2016
+
+\Outputs
+^Light = 2
+
+
+S.S.1,
+S1,
+    #START: ON ^Light ---> S2
+
+
+S2,
+    10": OFF ^Light ---> S1
+

@@ -1,0 +1,121 @@
+\Burghardt Lab, TPH Fear Conditioning Protocol
+\Feb 6 2017
+\Fear Conditioning Day 1 - Training  w/optogenetic manipulation
+
+\5CS-US pairing, 3 min habituation, 2 min consolidation, 90 - 120 sec ITIs, optogenetic manipulation concurrent with CS presentation
+\CS: 30 sec, 2kHz, 80dB,
+\US: 2 sec, 0.7mA
+
+\List of CS ITI options, 90 - 120 sec
+
+LIST Z = 90", 91", 92", 93", 94", 95", 96", 97", 98", 99", 100", 101", 102", 103", 104", 105", 106", 107", 108", 109", 110", 111", 112", 113", 114", 115", 116", 117", 118", 119", 120"
+
+\Output
+^Laser = 1
+^CS Tone = 6
+^GridFloor = 8
+
+\Variables
+\A = Tone Frequency (kHz)
+\B = Tone Amplitude (db)
+\C = Tone Duration/Laser Duration (sec)
+\D = Shock Duration (sec)
+\E = Shock Initiation (sec)
+\F = ITI from List Z (sec)
+\G = Session Clock (sec)
+
+
+S.S.1,
+S1,       \Variable Settings
+    #START: SET A = 2000, B = 85, C = 30, D = 2, E = C - D ---> S2
+
+S2,
+    0.001": SET C = C * 1", D = D * 1", E = E * 1", F = F * 1" ---> S3
+
+S3,       \Initialize Sound Generator
+    0.001": ~InitANL926;~;
+            ~SetFreq(MG, BOX, A);~;
+            ~SetAmp(MG, BOX, B);~;
+            ~SetDur(MG, BOX, C);~;
+            ---> S4
+
+S4,       \Initiation of 1st CS - US with laser pairing
+    2': SHOW 1, Start to 1st CS-US, 120;
+        ~ToneOn (MG, BOX);~;
+        ON ^CS Tone, ^Laser ---> S5
+
+S5,       \Initiation of shock
+    E#T: ON ^GridFloor ---> S6
+
+S6,       \End CS-US
+    D#T: ~ToneOff(MG, BOX);~;
+         OFF ^GridFloor, ^CS Tone, ^Laser;
+         RANDI F = Z ---> S7
+
+S7,      \Initiation of 2nd CS - US with laser pairing
+    F#T: SHOW 6, 1st to 2nd ITI, F/100;
+         ~ToneOn(MG, BOX);~;
+         ON ^CS Tone, ^Laser ---> S8
+
+S8,
+    E#T: ON ^GridFloor ---> S9
+
+S9,
+    D#T: ~ToneOff(MG, BOX);~;
+         OFF ^GridFloor, ^CS Tone, ^Laser;
+         RANDI F = Z ---> S10
+
+S10,     \Initiation of 3rd CS - US with laser pairing
+    F#T: SHOW 11, 2nd to 3rd ITI, F/100;
+         ~ToneOn(MG, BOX);~;
+         ON ^CS Tone, ^Laser ---> S11
+
+S11,
+    E#T: ON ^GridFloor ---> S12
+
+S12,
+    D#T: ~ToneOff(MG, BOX);~;
+         OFF ^GridFloor, ^CS Tone, ^Laser;
+         RANDI F = Z ---> S13
+
+S13,   \Initiation of 4th CS - US with laser pairing
+    F#T: SHOW 16, 3rd to 4th ITI, F/100;
+         ~ToneOn(MG, BOX);~;
+         ON ^CS Tone, ^Laser ---> S14
+
+S14,
+    E#T: ON ^GridFloor ---> S15
+
+S15,
+    D#T: ~ToneOff(MG, BOX);~;
+         OFF ^GridFloor, ^CS Tone, ^Laser;
+         RANDI F = Z ---> S16
+
+S16,    \Initiation of 5th CS - US with laser pairing
+    F#T: SHOW 21, 4th to 5th ITI, F/100;
+         ~ToneOn(MG, BOX);~;
+         ON ^CS Tone, ^Laser  ---> S17
+
+S17,
+    E#T: ON ^GridFloor ---> S18
+
+S18,
+    D#T: ~ToneOff(MG, BOX);~;
+         OFF ^GridFloor, ^CS Tone, ^Laser ---> S19
+
+S19,
+    2': SHOW 26, 5th CS-US to End, 120 ---> STOPABORTFLUSH
+
+
+S.S.2,
+S1,
+    #START: ---> S2
+
+S2,
+    1": ADD G; SHOW 2, Session Time, G ---> S2
+
+
+
+
+
+

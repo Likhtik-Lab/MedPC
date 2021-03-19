@@ -1,0 +1,24 @@
+\Burghardt Lab, TPH Fear Conditioning Protocol
+\Jan 28 2019
+\Fear Conditioning  - Context-C (altered MedPC for discrimination follow up)
+
+
+\No CS-US presentation
+\Animals in training context for 5 min session
+
+\Outputs
+^HouseLight = 7
+
+S.S.1,
+S1,
+    #START: ON ^HouseLight ---> S2
+
+S2,
+    6': OFF ^HouseLight  ---> STOPABORTFLUSH
+
+S.S.2,
+S1,
+    #START: ---> S2
+
+S2,
+    1": ADD G; SHOW 2, Session Time, G ---> S2

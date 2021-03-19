@@ -1,0 +1,130 @@
+\Explicit Safety Paradigm Phase 3
+\Aug 12, 2016
+
+\Explicit Safety Phase 3.mpc
+
+\CS tone control: Average inter CS duration of 132 (range: 100-140) seconds with each CS tone playing for 20 seconds. No US.
+
+
+\Control Variables
+Var_Alias Frequency of the Tone (Hz)      = A  \ Default = 2000 Hz
+Var_Alias Amplitude of the Tone (dB)      = B  \ Default = 85 dB
+Var_Alias Start to 1st CS (sec)           = E  \ Default = Rand from ListZ
+Var_Alias 1st to 2nd CS interval (sec)    = F  \ Default = Rand from ListZ
+Var_Alias 2nd to 3rd CS interval (sec)    = G  \ Default = Rand from ListZ
+Var_Alias 3rd to 4th CS interval (sec)    = H  \ Default = Rand from ListZ
+Var_Alias 4th to 5th CS interval (sec)    = I  \ Default = Rand from ListZ
+Var_Alias Tone On Time  (sec)             = J  \ Default = 20 seconds
+Var_Alias 5th CS to end Time (sec)        = K  \ Default = Rand from ListZ
+
+
+\Generation of LIST of numbers in MatLab, range: 100-140, mean = 132
+
+LIST Z = 120, 129, 135, 131, 129, 113, 138, 121, 135, 129, 124, 134, 128, 126, 131, 132, 135, 135, 119, 133, 128, 129, 131, 109, 126, 138, 133, 128, 129, 123, 126, 127, 131, 137, 132, 131, 125, 140, 134, 137, 134, 138, 129, 136, 137, 132, 124, 128, 133, 132, 130, 128, 139, 132, 126, 139, 132, 139, 118, 122, 137, 131, 131, 135, 133, 132, 128, 127, 126, 133, 125, 117, 122, 135, 123, 133, 128, 129, 139, 137, 118, 139, 130, 124, 126, 122, 132, 129, 130, 134, 130, 118, 127, 128, 118, 139, 115, 135, 130, 129, 137, 130, 130, 125, 140, 137, 136, 138, 138, 135, 137, 126, 132, 136, 126, 132, 130, 136, 137, 131, 133, 127, 135, 133, 132, 139, 119, 125, 137, 134, 131, 126, 135, 137, 121, 132, 121, 133, 136, 126, 128, 137, 129, 126, 126, 120, 112, 122, 116, 121, 110, 137, 132, 124, 122, 121, 130, 116, 135, 131, 129, 137, 135, 129, 132, 131, 127, 133, 124, 123, 134, 130, 125, 133, 123, 135, 119, 112, 130, 124, 127, 124, 130, 129, 129, 129, 128, 126, 117, 133, 136, 129, 129, 121, 134, 128, 135, 139, 124, 134
+
+\Working Variables
+\ S = Time elapsed during trial
+
+\Output
+^CS Tone = 6
+
+S.S.1,   \Set Inter-tone time variables from List Z, this will assign different times within the ListZ for each run of the program
+S1,
+    0.001": RANDD E = Z; ON E ---> S2
+S2,
+    0.005": OFF E ---> S3
+
+S3,
+    0.001": RANDD F = Z; ON F ---> S4
+
+S4,
+    0.005": OFF F  ---> S5
+S5,
+    0.001": RANDD G = Z; ON G ---> S6
+
+S6,
+    0.005": OFF G   ---> S7
+
+S7,
+    0.001": RANDD H = Z; ON H ---> S8
+
+S8,
+     0.005": OFF H ---> S9
+S9,
+    0.001": RANDD I = Z; ON I  ---> S10
+
+S10,
+   0.005": OFF I ---> S11
+
+S11,
+    0.001": RANDD K = Z; ON K  ---> S12
+
+S12,
+     0.005": OFF K  ---> SX
+
+
+S.S.2,    \set variables, Initiate 5 CS
+S1,
+    #START: SET A = 2000, B = 85, J = 20 ---> S2
+
+S2,
+    0.001": SET E = E * 1", F = F * 1", G = G * 1", H = H * 1", I = I * 1", J = J * 1", K = K * 1", S = S * 1" ---> S3
+
+S3,    \initialize Sound Generator
+    0.001": ~InitANL926;~;
+            ~SetFreq(MG, BOX, A);~;
+            ~SetAmp(MG, BOX, B);~;
+            ~SetDur(MG, BOX, J);~;
+              ---> S4
+
+S4,      \ Turn on Tone after E seconds
+       E#T: ~ToneOn (MG, BOX);~;
+            ON ^CS Tone --->S5
+
+S5,      \Turn off tone
+       J#T: ~ToneOff(MG, BOX);~;
+            OFF ^CS Tone ---> S6
+
+S6,  \ initialize Sound Generator and timing for CS2
+       F#T:  ~ToneOn (MG, BOX);~;
+             ON ^CS Tone --->S7
+
+S7,      \Turn off tone
+       J#T: ~ToneOff(MG, BOX);~;
+            OFF ^CS Tone --->S8
+
+S8, \initialize Sound Generator and timing for CS3
+       G#T:  ~ToneOn (MG, BOX);~;
+             ON ^CS Tone --->S9
+
+S9,    \Turn off tone
+       J#T: ~ToneOff(MG, BOX);~;
+            OFF ^CS Tone ---> S10
+
+S10,    \initialize Sound Generator and timing for CS4
+        H#T:  ~ToneOn (MG, BOX);~;
+               ON ^CS Tone --->S11
+
+S11,      \Turn off  tone
+       J#T: ~ToneOff(MG, BOX);~;
+            OFF ^CS Tone ---> S12
+
+S12,      \initialize Sound Generator and timing for CS5
+        I#T:  ~ToneOn (MG, BOX);~;
+               ON ^CS Tone --->S13
+
+S13,      \Turn off tone
+       J#T: ~ToneOff(MG, BOX);~;
+            OFF ^CS Tone ---> S14
+
+S14,      \ End the Session K seconds after the Shock and Tone finish
+       30":  ---> StopAbortFlush
+
+S.S.3,     \Show Variables on MedPC, Show Session Time in seconds
+
+S1,
+   #START: SHOW 2, Start to 1st CS (sec), E, 3, Time to 2nd CS (sec), F + E + J, 4, Time to 3rd CS (sec), G + F + E + J + J, 5, Time to 4th CS (sec), H + G + F + E + J + J + J, 6, Time to 5th CS (sec), I + H + G + F + E + J + J + J + J,
+       7, Tone Dur (sec), 20 ---> S2
+S2,
+    1": ADD S; SHOW 1, Session Time (sec), S ---> S2
+

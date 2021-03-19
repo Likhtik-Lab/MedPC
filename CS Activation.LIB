@@ -1,0 +1,48 @@
+\CS+ and CS- Activation Macro
+\August 18, 2016
+
+^GridFloor = 8
+
+DEFINEMACRO CS+ = {S.S.1,
+                               S1,
+                                #START:   ~InitANL926;~;                \resetting ANL926
+                                          ~SetAMP(MG, BOX,85);~;        \initialze amplitude (dB)
+                                          ~SetRF(MG, BOX, 5);~;         \set Rise and Fall  (msec)
+                                          ~SetDur(MG,BOX, 50);~;        \set duration of tone (msec)
+                                             ---> SX
+
+                               S.S.2,
+                                S1,
+                                    #START: ---> S2
+
+                                S2,
+                                      1": ADD T;
+                                      IF T > 30 [@T, @F]
+                                             @T: ---> S3
+                                             @F: SHOW 14, Number of Tones:, T;
+                                                 ~ONFreq(MG, BOX, 2000);~ ---> S2       \Freq of Tone (Hz)
+                                S3,
+                                    1#T: ON ^GridFloor ---> S4
+
+                                S4,
+                                    1#T: OFF ^GridFloor ---> SX
+}
+
+DEFINEMACRO CS- =   {S.S.1,
+                               S1,
+                                   #START:   ~InitANL926;~;                  \resetting ANL926
+                                             ~SetFreq(MG, BOX, 85);~;        \initialze amplitude (dB)
+                                             ~SetAmp(MG, BOX, 5);~;          \set Rise and Fall  (msec)
+                                             ~SetDur(MG, BOX, 50);~;         \set duration of tone (msec)
+                                               ---> S1
+                               S.S.2,
+                                S1,
+                                   #START: ---> S2
+
+                                S2,
+                                    1": ADD T;
+                                    IF T > 30 [@T, @F]
+                                           @T: ---> SX
+                                           @F: SHOW 14, Number of Tones:, T;
+                                               ~ONFreq(MG, BOX, 8000);~ ---> S2    \Freq of Tone (Hz)
+                               }

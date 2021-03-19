@@ -1,0 +1,21 @@
+\Burghardt Lab, TPH Fear Conditioning Protocol
+\Feb 6 2017
+\Fear Conditioning Day 3 - Context
+
+
+\No CS-US presentation
+\Animals in training context for 5 min session
+
+S.S.1,
+S1,
+    #START: ---> S2
+
+S2,
+    5': ---> STOPABORTFLUSH
+
+S.S.2,
+S1,
+    #START: ---> S2
+
+S2,
+    1": ADD G; SHOW 2, Session Time, G ---> S2

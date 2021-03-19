@@ -1,0 +1,201 @@
+\June, 2019
+\Carolina+Itzik
+
+
+\fear recall
+\5 CS (pips) @ 8khZ
+\5 CS (pips) @ 2Khz
+
+
+
+List Z = 60", 80", 100", 120"
+
+\Output
+^CS Tone  = 6
+
+
+
+S.S.1,
+S1,        \Variable Settings
+    #START: ---> S2
+
+S2,        \Initialize Tone Generator
+    0.001": ~InitANL926;~;
+            ~SetAmp(MG, BOX, 100);~;
+            ~SetRF(MG, BOX, 2);~;
+            ~SetDur(MG, BOX, 46);~;
+            ---> SX
+
+S.S.2,
+
+S1,
+
+    60": ---> S2
+
+S2,
+
+    60": ---> S3
+
+
+S3,                                                                                        \first pip CS  8khz
+    1": ADD A;
+        IF A < 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, 8000);~;
+                     ON ^CS Tone   ---> S3
+             @False: IF A = 30 [@True]
+                     @True: ~ONFreq(MG, BOX, 8000);~;
+                      ON ^CS Tone  ---> S4
+S4,
+    1": OFF ^CS Tone; RANDI L = Z  ---> S5
+
+S5,
+     L#T: SHOW 1, 1st ISI (sec), B/100 ---> S6
+
+S6,                                                                                     \second pip CS
+  1": ADD K;
+        IF K < 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, 8000);~;
+                      ON ^CS Tone  ---> S6
+             @False: IF K = 30 [@True]
+                     @True: ~ONFreq(MG, BOX, 8000);~;
+                      ON ^CS Tone  ---> S7
+
+S7,
+    1": OFF ^CS Tone; RANDI L = Z ---> S8
+
+
+S8,
+    L#T: SHOW 6, 2nd ISI (sec), B/100 ---> S9
+
+S9,                                                                                    \third pip CS
+       1": ADD C;
+       IF C < 30 [@True, @False]
+            @True: ~ONFreq(MG, BOX, 8000);~;
+                     ON ^CS Tone  ---> S9
+            @False: IF C = 30 [@True]
+                    @True: ~ONFreq(MG, BOX, 8000);~;
+                     ON ^CS Tone  ---> S10
+
+S10,
+   1": OFF ^CS Tone; RANDI L = Z  ---> S11
+
+
+S11,
+     L#T: SHOW 11, 3rd ISI (sec), B/100 ---> S12
+
+S12,
+    1": ADD D;                                                                              \fourth pip CS
+        IF D < 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, 8000);~;
+                     ON ^CS Tone  ---> S12
+             @False: IF D = 30 [@True]
+                     @True: ~ONFreq(MG, BOX, 8000);~;
+                     ON ^CS Tone  ---> S13
+
+S13,
+    1": OFF ^CS Tone; RANDI L = Z   ---> S14
+
+
+S14,
+    L#T: SHOW 16, 4th ISI (sec), B/100 ---> S15
+
+S15,
+     1": ADD E;                                                                              \Fifth pip CS
+         IF E < 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, 8000);~;
+                      ON ^CS Tone  ---> S15
+             @False: IF E = 30 [@True]
+                     @True: ~ONFreq(MG, Box, 8000);~;
+                      ON ^CS Tone  ---> S16
+
+S16,
+    1": OFF ^CS Tone; RANDI L = Z ---> S17
+
+S17,
+    L#T: SHOW 21, 5th CS (sec), B/100 ---> S18
+
+
+S18,                                                                                         \first pip CS  2khz
+    1": ADD F;
+        IF F < 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, 2000);~;
+                     ON ^CS Tone   ---> S18
+             @False: IF F = 30 [@True]
+                     @True: ~ONFreq(MG, BOX, 2000);~;
+                      ON ^CS Tone  ---> S19
+S19,
+    1": OFF ^CS Tone; RANDI L = Z  ---> S20
+
+S20,
+     L#T: SHOW 26, 6th ISI (sec), B/100 ---> S21
+
+S21,                                                                                     \second pip CS
+1": ADD G;
+        IF G < 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, 2000);~;
+                      ON ^CS Tone  ---> S21
+             @False: IF G = 30 [@True]
+                     @True: ~ONFreq(MG, BOX, 2000);~;
+                      ON ^CS Tone  ---> S22
+
+S22,
+    1": OFF ^CS Tone; RANDI L = Z ---> S23
+
+
+S23,
+    L#T: SHOW 31, 7th ISI (sec), B/100 ---> S24
+
+S24,                                                                                    \third pip CS
+       1": ADD H;
+       IF H < 30 [@True, @False]
+            @True: ~ONFreq(MG, BOX, 2000);~;
+                     ON ^CS Tone  ---> S24
+            @False: IF H = 30 [@True]
+                    @True: ~ONFreq(MG, BOX, 2000);~;
+                     ON ^CS Tone  ---> S25
+
+S25,
+   1": OFF ^CS Tone; RANDI L = Z  ---> S26
+
+
+S26,
+     L#T: SHOW 36, 8th ISI (sec), B/100 ---> S27
+
+S27,
+    1": ADD I;                                                                              \fourth pip CS
+        IF I < 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, 2000);~;
+                     ON ^CS Tone  ---> S27
+             @False: IF I = 30 [@True]
+                     @True: ~ONFreq(MG, BOX, 2000);~;
+                     ON ^CS Tone  ---> S28
+
+S28,
+    1": OFF ^CS Tone; RANDI L = Z   ---> S29
+
+
+S29,
+    L#T: SHOW 41, 9th ISI (sec), B/100 ---> S30
+
+S30,
+     1": ADD J;                                                                              \Fifth pip CS
+         IF J < 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, 2000);~;
+                      ON ^CS Tone  ---> S30
+             @False: IF J = 30 [@True]
+                     @True: ~ONFreq(MG, Box, 2000);~;
+                      ON ^CS Tone  ---> S31
+
+S31,
+    1": OFF ^CS Tone; RANDI L = Z ---> S32
+
+S32,
+    L#T: SHOW 46, 10th CS to END (sec), B/100 ---> STOPABORTFLUSH
+
+
+S.S.3,
+S1,
+    #START: ---> S2
+
+S2,
+    1": ADD Q; SHOW 2, Session Time, Q ---> S2

@@ -1,0 +1,138 @@
+\Habituation - Itamar
+\updated April 4, 2017
+
+\Differential Fear Conditioning Test 1.mpc
+
+\Habituation 3 CS+ and 3CS-
+
+\Outputs
+^Laser = 1
+^CS Tone = 6
+^HouseLight = 7
+^GridFloor  = 8
+
+^FreqTwo    = 0
+^FreqEight  = 1
+^Amp        = 2
+^RF         = 3
+^Dur        = 4
+
+DIM A = 4
+
+
+\Inter stimulus (CS) intervals
+List Z =60", 80", 100", 120"
+
+
+S.S.1,
+S1,
+    0.001": SET A(^FreqTwo) = 2000, A(^FreqEight) = 8000, A(^Amp)= 100, A(^RF) = 2, A(^Dur) = 46 ---> S1
+
+
+
+
+S.S.2,       \ 6 CS+, 6 CS- protocol
+
+S1,
+          #START: ~InitANL926;~;                    \resetting ANL926
+                  ~SetAMP(MG, BOX, A [2]);~;        \initialze amplitude (dB)
+                  ~SetRF(MG, BOX, A [3]);~;         \set Rise and Fall  (msec)
+                  ~SetDur(MG,BOX, A [4]);~;         \set duration of tone (msec)
+                  RANDI B = Z ---> S2
+
+
+S2, \60, 90, 120 sec from List Z
+     B#T: SHOW 1,Start to 1st ISI (sec),B/100 ---> S3
+
+S3,                                                                                         \one CS minus
+    1": ADD C;
+        IF C <= 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A[0]);~;
+                     ON ^CS Tone; ON ^Laser ---> S3
+             @False: OFF ^CS Tone; OFF ^Laser;
+                     RANDI B = Z ---> S4
+
+S4,
+    B#T: SHOW 6, 1st ISI (sec), B/100 ---> S5
+
+S5,                                                                                         \Two CS Plus
+        1": ADD D;
+        IF D <= 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [1]);~;
+             ON ^CS Tone; ON ^Laser ---> S5
+             @False: OFF ^CS Tone; OFF ^Laser; RANDI B = Z ---> S6
+S6,
+    B#T: SHOW 11, 2nd ISI (sec), B/100  ---> S7
+
+S7,                                                                                        \ Three CS Plus
+    1": ADD E;
+        IF E <= 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [1]);~;
+                 ON ^CS Tone; ON ^Laser ---> S7
+             @False: OFF ^CS Tone; OFF ^Laser; RANDI B = Z ---> S8
+
+S8,
+     B#T: SHOW 16, 3rd ISI (sec), B/100 ---> S9
+
+S9,                                                                                     \ Four CS minus
+1": ADD F;
+        IF F <= 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [0]);~;
+                     ON ^CS Tone; ON ^Laser ---> S9
+             @False: OFF ^CS Tone; OFF ^Laser; RANDI B = Z ---> S10
+
+S10,
+    B#T: SHOW 21, 4th ISI (sec), B/100 ---> S11
+
+S11,                                                                                   \ Five CS minus
+1": ADD H;
+        IF H <= 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A[0]);~;
+                     ON ^CS Tone; ON ^Laser ---> S11
+             @False: OFF ^CS Tone; OFF ^Laser; RANDI B = Z ---> S12
+
+S12,
+    B#T: SHOW 26, 5th ISI (sec), B/100 ---> S13
+
+S13,                                                                                    \six CS plus
+       1": ADD I;
+       IF I <= 30 [@True, @False]
+            @True: ~ONFreq(MG, BOX, A [1]);~;
+                    ON ^CS Tone; ON ^Laser ---> S13
+            @False: OFF ^CS Tone; OFF ^Laser; RANDI B = Z ---> S14
+
+S14,
+    B#T: SHOW 31, END (sec), B/100 ---> STOPABORTFLUSH
+
+S.S.3,
+
+S1,
+    #START: ---> S2
+S2,
+    1": ADD P; SHOW 2, Session Time (sec), P ---> S2
+
+S.S.4
+    S1,                                         \1st CS      Syntax: SHOW P1,P2,P3 as per page 106 in MED PC Programmer's Manual. Note that P3 cannot contain words such as "plus" or "minus" which is why the pertinent info is completely contained in P2. P3 is negligible
+    0.001": SHOW 3, CS minus, 0 ---> S2
+    S2,
+    0.001": SHOW 4, Tone kHz, 1  ---> S3
+    S3,                                          \2nd CS
+    0.001": SHOW 8, CS Plus , 0 ---> S4
+    S4,
+    0.001": SHOW 9, Tone kHz, 7 ---> S5
+    S5,                                          \3rd CS
+    0.001": SHOW 13, CS Plus , 0 ---> S6
+    S6,
+    0.001": SHOW 14, Tone kHz, 7 ---> S7
+    S7,                                           \4th CS
+    0.001": SHOW 18, CS minus , 0 ---> S8
+    S8,
+    0.001": SHOW 19, Tone kHz, 1  ---> S9
+    S9,                                            \5th CS
+    0.001": SHOW 23, CS minus, 0 ---> S10
+    S10,
+    0.001": SHOW 24, Tone kHz, 1 ---> S11
+    S11,                                           \6th CS
+    0.001": SHOW 28, CS Plus, 0 ---> S12
+    S12,
+    0.001": SHOW 29, Tone kHz, 7 ---> SX

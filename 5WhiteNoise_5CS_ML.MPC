@@ -1,0 +1,158 @@
+\April 9, 20178
+\Margorita Labkovich
+\BLA retrobeads injections (ML006-ML017) - Day 3
+
+
+\Fear Conditiooning:10 white noise tones in Context B
+
+
+List Z  = 120", 129", 135", 131", 129", 113", 138", 121", 135", 129", 124", 134", 128", 126", 131", 132", 135", 135", 119", 133", 128", 129", 131", 109", 126", 138", 133", 128", 129", 123", 126", 127", 131", 137", 132", 131", 125", 140", 134", 137", 134", 138", 129", 136", 137", 132", 124", 128", 133", 132", 130", 128", 139", 132", 126", 139", 132", 139", 118", 122", 137", 131", 131", 135", 133", 132", 128", 127", 126", 133", 125", 117", 122", 135", 123", 133", 128", 129", 139", 137", 118", 139", 130", 124", 126", 122", 132", 129", 130", 134", 130", 118", 127", 128", 118", 139", 115", 135", 130", 129", 137", 130", 130", 125", 140", 137", 136", 138", 138", 135", 137", 126", 132", 136", 126", 132", 130", 136", 137", 131", 133", 127", 135", 133", 132", 139", 119", 125", 137", 134", 131", 126", 135", 137", 121", 132", 121", 133", 136", 126", 128", 137", 129", 126", 126", 120", 112", 122", 116", 121", 110", 137", 132", 124", 122", 121", 130", 116", 135", 131", 129", 137", 135", 129", 132", 131", 127", 133", 124", 123", 134", 130", 125", 133", 123", 135", 119", 112", 130", 124", 127", 124", 130", 129", 129", 129", 128", 126", 117", 133", 136", 129", 129", 121", 134", 128", 135", 139", 124", 134"
+
+
+\Output
+^CS Tone = 6
+
+\Variables
+\A = Tone Frequency (kHz)
+\B = Tone Amplitude (db)
+\C = Tone Duration (sec)
+\F = ITI from List Z (sec)
+\G = Session Clock (sec)
+
+S.S.1,
+S1,        \Variable Settings
+    #START: SET A = 0, B = 85, C = 20 ---> S2
+
+S2,
+    0.001": SET C = C * 1" ---> S3
+
+S3,        \Initialize Tone Generator
+    0.001": ~InitANL926;~;
+            ~SetFreq(MG, BOX, A);~;
+            ~SetAmp(MG, BOX, B);~;
+            ~SetDur(MG, BOX, C);~;
+            ---> S4
+
+S4,        \1st CS
+    2': SHOW 1, Start to 1st CS, 120;
+        ~ToneOn(MG, BOX);~;
+        ON ^CS Tone ---> S5
+
+S5,
+    C#T: ~ToneOff(MG, BOX);~;
+        OFF ^CS Tone;
+        RANDI F = Z ---> S6
+
+S6,        \2nd CS
+    F#T: SHOW 6, 1st to 2nd ITI, F/100;
+         ~ToneOn(MG, BOX);~;
+         ON ^CS Tone ---> S7
+
+S7,
+    C#T: ~ToneOff(MG, BOX);~;
+         OFF ^CS Tone;
+         RANDI F = Z ---> S8
+
+S8,        \3rd CS
+    F#T: SHOW 11, 2nd to 3rd ITI, F/100;
+         ~ToneOn(MG, BOX);~;
+         ON ^CS Tone ---> S9
+
+S9,
+    C#T: ~ToneOff(MG, BOX);~;
+         OFF ^CS Tone;
+         RANDI F = Z ---> S10
+
+S10,       \4th CS
+    F#T: SHOW 16, 3rd to 4th ITI, F/100;
+         ~ToneOn(MG, BOX);~;
+         ON ^CS Tone ---> S11
+
+S11,
+    C#T: ~ToneOff(MG, BOX);~;
+         OFF ^CS Tone;
+         RANDI F = Z ---> S12
+
+S12,      \5th CS
+    F#T: SHOW 21, 4th to 5th ISI, F/100;
+         ~ToneOn(MG, BOX);~;
+         ON ^CS Tone ---> S13
+
+S13,
+    C#T: ~ToneOff(MG, BOX);~;
+         OFF ^CS Tone;
+         RANDI F = Z ---> S14
+
+S14,
+    0.001": SET D = 2000, E = 85, G = 20 ---> S15
+
+S15,
+    0.001": SET G = G * 1" ---> S16
+
+S16,        \Initialize Tone Generator
+    0.001": ~InitANL926;~;
+            ~SetFreq(MG, BOX, D);~;
+            ~SetAmp(MG, BOX, E);~;
+            ~SetDur(MG, BOX, G);~;
+            ---> S17
+
+S17,    \6th CS
+    F#T: SHOW 26, 5th to 6th ITI, F/100;
+         ~ToneOn(MG, BOX);~;
+         ON ^CS Tone ---> S18
+
+S18,
+    G#T: ~ToneOff(MG, BOX);~;
+         OFF ^CS Tone;
+         RANDI F = Z ---> S19
+
+S19,         \7th CS
+    F#T: SHOW 31, 6th to 7th ITI, F/100;
+         ~ToneOn(MG, BOX);~;
+         ON ^CS Tone ---> S20
+
+S20,
+    G#T: ~ToneOff(MG, BOX);~;
+         OFF ^CS Tone;
+         RANDI F = Z ---> S21
+
+S21,          \8th CS
+    F#T: SHOW 36, 7th to 8th ITI, F/100;
+         ~ToneOn(MG, BOX);~;
+         ON ^CS Tone ---> S22
+
+S22,
+    G#T: ~ToneOff(MG, BOX);~;
+         OFF ^CS Tone;
+         RANDI F = Z ---> S23
+
+S23,        \9th CS
+    F#T: SHOW 41, 8th to 9th ITI, F/100;
+         ~ToneOn(MG, BOX);~;
+         ON ^CS Tone ---> S24
+
+S24,
+    G#T: ~ToneOff(MG, BOX);~;
+         OFF ^CS Tone;
+         RANDI F = Z ---> S25
+
+S25,        \10th CS
+    F#T: SHOW 46, 9th to 10th ITI, F/100;
+         ~ToneOn(MG, BOX);~;
+         ON ^CS Tone ---> S26
+
+S26,
+    G#T: ~ToneOff(MG, BOX);~;
+         OFF ^CS Tone;
+         RANDI F = Z ---> S27
+
+S27,
+    2': SHOW 51, 10th CS to End, 120 ---> STOPABORTFLUSH
+
+S.S.2,
+S1,
+    #START: ---> S2
+
+S2,
+    1": ADD Q; SHOW 2, Session Time, Q ---> S2
+

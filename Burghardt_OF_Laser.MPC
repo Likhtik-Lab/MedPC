@@ -1,0 +1,82 @@
+\Burghardt Lab, TPH Fear OF Protocol
+\April 3 2017
+\20 min OF
+
+\Animals in OF for 20 min. Alternating 1 min segments of laser stimulation
+
+\Outputs
+^Laser = 5
+
+S.S.1,
+
+S1,
+    #START: ---> S2
+
+S2,
+    60": ON ^Laser ---> S3
+
+S3,
+    60": OFF ^Laser ---> S4
+
+S4,
+    60": ON ^Laser ---> S5
+
+S5,
+    60": OFF ^Laser ---> S6
+
+S6,
+    60": ON ^Laser ---> S7
+
+S7,
+    60": OFF ^Laser ---> S8
+
+S8,
+     60": ON ^Laser ---> S9
+
+S9,
+    60": OFF ^Laser ---> S10
+
+S10,
+    60": ON ^Laser --->  S11
+
+S11,
+    60": OFF ^Laser ---> S12
+
+S12,
+    60": ON ^Laser ---> S13
+
+S13,
+    60": OFF ^Laser ---> S14
+
+S14,
+    60": ON ^Laser ---> S15
+
+S15,
+    60": OFF ^Laser ---> S16
+
+S16,
+    60": ON ^Laser --->  S17
+
+S17,
+    60": OFF ^Laser ---> S18
+
+S18,
+    60": ON ^Laser ---> S19
+
+S19,
+    60": OFF ^Laser ---> S20
+
+S20,
+    60": ON ^Laser ---> S21
+
+S21,
+    60": OFF ^Laser ---> STOPABORTFLUSH
+
+
+
+S.S.2,
+S1,
+    #START: ---> S2
+
+S2,
+    1": ADD G; SHOW 2, Session Time, G ---> S2

@@ -1,0 +1,115 @@
+\Testing - Susan
+\June 30, 2017
+
+\Differential Fear Conditioning Testing
+
+\20 trials of CS+ co-delivered with the laser, laser starts 5 seconds prior to pips, 30 seconds of pips and laser codeliverd
+\inter stimulus intervals of 60, 80, 100, 120 seconds from listZ with replacement
+
+\Outputs
+^Laser = 5
+^CS Tone = 6
+^HouseLight = 7
+^GridFloor  = 8
+
+^FreqTwo    = 0
+^FreqSeven  = 1
+^Amp        = 2
+^RF         = 3
+^Dur        = 4
+
+DIM A = 4
+
+
+\Inter stimulus (CS) intervals
+List Z = 60", 80", 100", 120"
+
+
+
+S.S.1,
+S1,
+        0.001": SET A(^FreqTwo) = 2000, A(^FreqSeven) = 7000, A(^Amp)= 100, A(^RF) = 2 , A(^Dur) = 46 ---> SX
+
+
+
+S.S.2,       \ 20 CS trials
+
+S1,
+          #START: ~InitANL926;~;                    \resetting ANL926
+                  ~SetAMP(MG, BOX, A [2]);~;        \initialze amplitude (dB)
+                  ~SetRF(MG, BOX, A [3]);~;         \set Rise and Fall  (msec)
+                  ~SetDur(MG,BOX, A [4]);~;         \set duration of tone (msec)
+                   ---> S2
+
+
+\~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+S2,
+    115": ON ^Laser ---> S3
+
+S3, \2 minutes until 1st CS+
+     5": SHOW 1, Start to 1st ISI (sec), 120 ---> S4
+
+S4,                                                 \CS plus
+    1": ADD C;
+        IF C < 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A[0]);~;
+                     ON ^CS Tone ---> S4
+             @False: IF C = 30 [@True]
+                     @True: ~ONFreq(MG, BOX, A[0]);~;
+                     ON ^CS Tone ---> S5
+S5,
+    1": OFF ^CS Tone, ^Laser ---> S13
+\~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+S6,                                                 \random ITI
+    0.001": RANDI B = Z ; SET E = B - 5" ---> S7
+
+S7,                                                  \Laser ON
+    E#T: ON ^Laser ---> S8
+
+S8,
+    4": --->S9
+
+S9,                                                 \Tone ON
+    1": ADD C;
+        IF C < 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A[0]);~;
+                     ON ^CS Tone ---> S8
+             @False: IF C = 30 [@True]
+                     @True: ~ONFreq(MG, BOX, A[0]);~;
+                     ON ^CS Tone ---> S10
+S10,
+    1": OFF ^CS Tone, ^Laser ---> S11                   \laser & tone off
+
+
+S11,
+     4": SHOW 6, Time (sec) , B/100 ---> S12
+
+S12,
+    0.001": Show 11, ISI # (add 1) , G ---> S13
+
+
+\~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+S13,                           \If loop
+    1": ADD G;
+    IF G < 20 [@True, @False]           \Run 20 times
+        @True: SET C = 0 ---> S6
+        @False: ---> S14
+
+\~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+S14,
+    B#T: SHOW 26, ENDED, 20 ---> STOPABORTFLUSH
+
+
+S.S.3,               \ timer
+S1,
+    #START: ---> S2
+
+S2,
+    1": ADD P; SHOW 2, Session Time, P ---> S2
+
+

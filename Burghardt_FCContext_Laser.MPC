@@ -1,0 +1,41 @@
+\Burghardt Lab, TPH Fear Conditioning Protocol
+\Feb 6 2017
+\Fear Conditioning Day 3 - Context with optogenetic manipulation
+
+\No CS-US presentation
+\Animals in training context for 6 min session, optogenetic manipulation alternating in 60sec trials
+
+\Outputs
+^Laser = 5
+
+S.S.1,
+
+S1,
+    #START: ---> S2
+
+S2,
+    60": ON ^Laser ---> S3
+
+S3,
+    60": OFF ^Laser ---> S4
+
+S4,
+    60": ON ^Laser ---> S5
+
+S5,
+    60": OFF ^Laser ---> S6
+
+S6,
+    60": ON ^Laser ---> S7
+
+S7,
+    60": OFF ^Laser ---> STOPABORTFLUSH
+
+
+
+S.S.2,
+S1,
+    #START: ---> S2
+
+S2,
+    1": ADD G; SHOW 2, Session Time, G ---> S2

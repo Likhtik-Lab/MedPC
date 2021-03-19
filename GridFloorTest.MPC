@@ -1,0 +1,50 @@
+\mA testing for gridfloor
+\will keep on the grid floor until manually ended
+
+\August 22, 2016
+
+\Outputs
+^Lever = 1
+^GridFloor = 8
+^Light = 2
+^Laser = 5
+^CS Tone = 6
+^PelletDisp = 3
+
+S.S.1,
+S1,
+    #START: ON ^Laser ---> S2
+
+S2,
+   3": OFF ^Laser ---> S3
+
+
+S3,
+    5": ON ^Laser ---> S4
+
+S4,
+    60": OFF ^laser ---> S5
+
+S5,
+    5": ON ^Laser ---> S6
+
+S6,
+    5": OFF ^Laser ---> S7
+S7,
+    5": ON ^CS Tone ---> S8
+
+S8,
+    5": OFF ^CS Tone ---> S9
+
+S9,
+    5": ON ^Lever ---> S10
+
+S10,
+    5": OFF ^Lever ---> S11
+
+S11,
+    5": ON ^PelletDisp ---> S12
+
+S12,
+    5": OFF ^PelletDisp ---> STOPABORT
+

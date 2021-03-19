@@ -1,0 +1,95 @@
+\Testing - 2kHz pips and laser coterminated
+\January 23, 2017
+
+\Differential Fear Conditioning Testing
+
+\5 trials of Laser habituation
+\inter stimulus intervals of 60, 80, 100, 120 seconds from listZ with replacement
+
+\Outputs
+^Laser = 5
+^CS Tone = 6
+^HouseLight = 7
+^GridFloor  = 8
+
+^FreqTwo    = 0
+^FreqEight  = 1
+^Amp        = 2
+^RF         = 3
+^Dur        = 4
+
+DIM A = 4
+
+
+\Inter stimulus (CS) intervals
+List Z = 60", 80", 100", 120"
+
+
+
+S.S.1,
+S1,
+        0.001": SET A(^FreqTwo) = 2000, A(^FreqEight) = 7000, A(^Amp)= 100, A(^RF) = 2 , A(^Dur) = 46 ---> SX
+
+
+
+S.S.2,       \ 5  trials
+
+S1,
+          #START: ---> S2
+S2,
+    90": --->S3
+
+S3,
+    35": ON ^Laser; SHOW 1, Start to 1st ISI (sec), 35 ---> S4
+
+S4,
+    35": OFF ^Laser ;  RANDI B = Z ; SET E = B - 5" ---> S5
+
+S5,
+    E#T: ON ^Laser; SHOW 6, 1st ISI (sec), B/100 ---> S6
+
+S6,
+    35": OFF ^Laser; RANDI B = Z ; SET E = B - 5" ---> S7
+
+S7,
+    E#T: ON ^Laser; SHOW 11, 2nd ISI (sec), B/100 ---> S8
+
+S8,
+   35": OFF ^Laser ; RANDI B = Z ; SET E = B - 5"---> S9
+
+S9,
+    E#T: ON ^Laser; SHOW 16, 3rd ISI (sec), B/100 ---> S10
+
+S10,
+    35": OFF ^Laser ; RANDI B = Z ; SET E = B - 5 ---> S11
+
+S11,
+    E#T: ON ^Laser; SHOW 21, 4th ISI (sec), B/100 ---> S12
+
+S12,
+    35": OFF ^Laser; RANDI B = Z ---> S13
+S13,
+    B#T: SHOW 26, 5th CS+ to END (sec), B/100 ---> STOPABORTFLUSH
+
+S.S.3,
+S1,
+    #START: ---> S2
+
+S2,
+    1": ADD P; SHOW 3, Session Time, P ---> S2
+
+
+S.S.4,
+    S1,                                          \1st laser      Syntax: SHOW P1,P2,P3 as per page 106 in MED PC Programmer's Manual. Note that P3 cannot contain words such as "plus" or "minus" which is why the pertinent info is completely contained in P2. P3 is negligible
+    0.001": SHOW 2, LASER ON (sec), 35 ---> S2
+    S2,                                          \2nd laser
+    0.001": SHOW 7, LASER ON (sec), 35  ---> S3
+    S3,                                          \3rd laser
+    0.001": SHOW 12, LASER ON (sec), 35 ---> S4
+    S4,                                          \4th laser
+    0.001": SHOW 17, LASER ON (sec), 35 ---> S5
+    S5,                                          \5th laser
+    0.001": SHOW 22, LASER ON (sec), 35 ---> SX
+
+
+

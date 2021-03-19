@@ -1,0 +1,218 @@
+\Differential Fear Conditioning Test 1 with Laser on during all CS- trials
+\November 3, 2016
+
+\Differential Fear Conditioning Test 1.mpc
+
+\12 trials, CS+/CS-,
+\CS+: 8kHz pips, 30 sec of pips, 50 msec/each at 1Hz; CS-:2kHz pips, 30 sec of pips, 50 msec/each at 1kHz
+\inter stimulus intervals of 60, 90, 120 seconds from list Z
+
+\Outputs
+^Laser = 5
+^CS Tone = 6
+^HouseLight = 7
+^GridFloor  = 8
+
+^FreqTwo    = 0
+^FreqEight  = 1
+^Amp        = 2
+^RF         = 3
+^Dur        = 4
+
+DIM A = 4
+
+\Var_Alias Frequency of the Tone (Hz)      = A (0)  \ Default = 2000 Hz
+\Var_Alias Frequency of the Tone (Hz)      = A (1)  \ Default = 8000 Hz
+\Var_Alias Amplitude of the Tone (dB)      = A (2)  \ Default = 100 dB
+\Var_Alias Rise/Fall Time of the Tone (ms) = A (3)  \ Default = 10 ms
+\Var_Alias Tone On Time    (sec)           = A (4)  \ Default = 0.05 seconds
+\Var_Alias Start to 1st CS (sec)           = B      \ Default from List Z
+\Var_Alias 1st to 2nd CS   (sec)           = B      \ Default from List Z
+\Var_Alias 2nd to 3rd CS   (sec)           = B     \ Default from List Z
+\Var_Alias 3rd to 4th CS   (sec)           = B     \ Default from List Z
+\Var_Alias 4th to 5th CS   (sec)           = B      \ Default from List Z
+\Var_Alias 5th to 6th CS   (sec)           = B      \ Default from List Z
+\Var_Alias 6th to 7th CS   (sec)           = B      \ Default from List Z
+\Var_Alias 7th to 8th CS   (sec)           = B      \ Default from List Z
+\Var_Alias 8th to 9th CS   (sec)           = B      \ Default from List Z
+\Var_Alias 9th to 10th CS  (sec)           = B      \ Default from List Z
+\Var_Alias 10th to 11th CS (sec)           = B      \ Default from List Z
+\Var_Alias 11th to 12th CS (sec)           = B      \ Default from List Z
+\Var_Alias 12th to end     (sec)           = B      \ Default from List Z
+
+
+\Inter stimulus (CS) intervals
+List Z = 60", 90", 120"
+
+
+
+S.S.1,
+S1,
+    0.001": SET A(^FreqTwo) = 2000, A(^FreqEight) = 8000, A(^Amp)= 100, A(^RF) = 10, A(^Dur) = 0.05, R = 0 ---> S1
+
+
+
+
+S.S.2,       \ 6 CS+, 6 CS- protocol
+
+S1,
+          #START: ~InitANL926;~;                    \resetting ANL926
+                  ~SetAMP(MG, BOX, A [2]);~;        \initialze amplitude (dB)
+                  ~SetRF(MG, BOX, A [3]);~;         \set Rise and Fall  (msec)
+                  ~SetDur(MG,BOX, A [4]);~;         \set duration of tone (msec)
+                  RANDI B = Z ---> S2
+
+
+S2, \60, 90, 120 sec from List Z
+     B#T: SHOW 1, 1st ISI (sec) , B/100 ---> S3
+
+S3,                                                                                         \one CS plus
+    1": ADD C;
+        IF C < 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A[1]);~;
+                     ON ^CS Tone ---> S3
+             @False: IF C = 30 [@True]
+                     @True: ~ONFreq(MG, BOX, A[1]);~;
+                     OFF ^CS Tone;
+                     RANDI B = Z; SET Q = B - 5 ---> S4
+
+S4,
+    Q#T: ON ^Laser ---> S5
+
+S5,
+    5": SHOW 6, 2nd ISI (sec), B/100  ---> S6
+
+S6,                                                                                         \Two CS minus
+        1": ADD D;
+        IF D <= 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [0]);~;
+             ON ^CS Tone ---> S6
+             @False: OFF ^CS Tone, ^Laser; RANDI B = Z; SET Q = B - 5 ---> S7
+S7,
+    Q#T: ON ^Laser ---> S8
+
+S8,
+    5": SHOW 11, 3rd ISI (sec), B/100  ---> S9
+
+S9,                                                                                        \ Three CS minus
+    1": ADD E;
+        IF E <= 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [0]);~;
+                 ON ^CS Tone ---> S9
+             @False: OFF ^CS Tone, ^Laser; RANDI B = Z ---> S10
+
+S10,
+     B#T: SHOW 16, 4th ISI (sec), B/100 ---> S11
+
+S11,                                                                                     \ Four CS plus
+1": ADD F;
+        IF F < 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [1]);~;
+                     ON ^CS Tone ---> S11
+             @False: IF F = 30 [@True]
+                     @True: ~ONFreq(MG, BOX, A [1]);~;
+                             OFF ^CS Tone;
+                             RANDI B = Z; SET Q = B - 5 ---> S12
+
+S12,
+    Q#T: ON ^Laser ---> S13
+
+S13,
+    5": SHOW 21, 5th ISI (sec), B/100 ---> S14
+
+S14,                                                                                   \ Five CS minus
+    1": ADD H;
+        IF H <= 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A[0]);~;
+                     ON ^CS Tone ---> S14
+             @False: OFF ^CS Tone, ^Laser; RANDI B = Z ---> S15
+
+S15,
+    B#T: SHOW 26, 6th ISI (sec), B/100 ---> S16
+
+S16,                                                                                    \six CS plus
+       1": ADD I;
+       IF I < 30 [@True, @False]
+            @True: ~ONFreq(MG, BOX, A [1]);~;
+                    ON ^CS Tone ---> S16
+            @False: IF I = 30 [@True]
+                    @True: ~ONFreq(MG, BOX, A [1]);~;
+                            OFF ^CS Tone;
+                            RANDI B = Z; SET Q = B - 5 ---> S17
+
+S17,
+    Q#T: ON ^Laser ---> S18
+
+S18,
+    5": SHOW 31, 7th ISI (sec), B/100  ---> S19
+
+S19,                                                                                     \ seven CS minus
+    1": ADD J;
+        IF J <= 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [0]);~;
+                     ON ^CS Tone ---> S19
+             @False: OFF ^CS Tone, ^Laser; RANDI B = Z ---> S20
+
+S20,
+     B#T: SHOW 36, 8th ISI (sec), B/100  ---> S21
+
+S21,
+    1": ADD K;                                                                              \eight CS plus
+        IF K < 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [1]);~;
+                    ON ^CS Tone ---> S21
+             @False: IF K = 30 [@True]
+                     @True: ~ONFreq(MG, BOX, A [1]);~;
+                             OFF ^CS Tone;
+                             RANDI B = Z; SET Q = B - 5 ---> S22
+
+S22,
+    Q#T: ON ^Laser ---> S23
+
+S23,
+    5": SHOW 41, 9th ISI (sec), B/100  ---> S24
+
+S24,                                                                                          \nine CS minus
+     1": ADD L;
+         IF L <= 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A[0]);~;
+                    ON ^CS Tone ---> S24
+             @False: OFF ^CS Tone, ^Laser; RANDI B = Z; SET Q = B - 5 ---> S25
+
+S25,
+    Q#T: ON ^Laser ---> S26
+
+S26,
+    5": SHOW 46, 10th ISI (sec), B/100  ---> S27
+
+S27,
+    1": ADD M;                                                                             \ten CS minus
+        IF M <= 30 [@True, @False]
+            @True: ~ONFreq(MG, BOX, A[0]);~;
+                    ON ^CS Tone ---> S27
+            @False: OFF ^CS Tone, ^Laser; RANDI B = Z ---> S28
+
+S28,
+    B#T: SHOW 51, 11th ISI (sec), B/100  ---> S29
+
+S29,                                                                                          \eleven CS plus
+    1": ADD N;
+        IF N < 30 [@True, @False]
+            @True: ~ONFreq(MG, BOX, A[1]);~;
+                    ON ^CS Tone ---> S29
+            @False: IF N = 30 [@True]
+                    @True: ~ONFreq(MG, BOX, A [1]);~;
+                           OFF ^CS Tone;
+                           RANDI B = Z; ADD R ---> S30
+                                                                                          \twelve CS plus
+S30,
+    B#T: SHOW 56, 12th ISI (sec), B/100;
+         IF R = 1 [@T, @F]
+             @T: SET N = 0; RANDI B = Z ---> S28
+             @F: ---> STOPABORTFLUSH
+S.S.3,
+
+S1,
+    #START: ---> S2
+S2,
+    1": ADD P; SHOW 2, Session Time (sec), P ---> S2
