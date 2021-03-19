@@ -1,0 +1,114 @@
+\Outputs
+^Laser = 1
+^CS Tone = 6
+
+
+^FreqTwo    = 0
+^Amp        = 2
+^RF         = 3
+^Dur        = 4
+
+DIM A = 4
+
+
+
+
+
+
+S.S.1,
+S1,
+        0.001": SET A(^FreqTwo) = 2000, A(^Amp)= 100, A(^RF) = 2 , A(^Dur) = 46 ---> SX
+
+
+
+S.S.2,       \ 4 CS trials
+
+S1,
+          #START: ~InitANL926;~;                    \resetting ANL926
+                  ~SetAMP(MG, BOX, A [2]);~;        \initialze amplitude (dB)
+                  ~SetRF(MG, BOX, A [3]);~;         \set Rise and Fall  (msec)
+                  ~SetDur(MG,BOX, A [4]);~;         \set duration of tone (msec)
+                   ---> S2
+S2,
+    119":  ---> S3
+
+S3,
+    1": ADD C; ON ^Laser;
+        IF C < 120 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A[0]);~;
+                     ON ^CS Tone ---> S3
+             @False: IF C = 120 [@True]
+                     @True: ~ONFreq(MG, BOX, A[0]);~;
+                     ON ^CS Tone ---> S4
+S4,
+    1": OFF ^CS Tone, ^Laser  ---> S5
+
+S5,
+    119":  ---> S6
+
+S6,
+1": ADD F; ON ^Laser;
+        IF F < 120 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [0]);~;
+                     ON ^CS Tone ---> S6
+             @False: IF F = 120 [@True]
+                     @True: ~ONFreq(MG, BOX, A [0]);~;
+                     ON ^CS Tone ---> S7
+
+S7,
+    1": OFF ^CS Tone, ^Laser ---> S8
+
+S8,
+    119":  ---> S9
+
+S9,
+       1": ADD I;   ON ^Laser;
+       IF I < 120 [@True, @False]
+            @True: ~ONFreq(MG, BOX, A [0]);~;
+                    ON ^CS Tone ---> S9
+            @False: IF I = 120 [@True]
+                    @True: ~ONFreq(MG, BOX, A [0]);~;
+                    ON ^CS Tone ---> S10
+
+S10,
+   1": OFF ^CS Tone, ^Laser ---> S11
+
+S11,
+    119":  ---> S12
+
+S12,
+    1": ADD K; ON ^Laser;
+        IF K < 120 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [0]);~;
+                     ON ^CS Tone ---> S12
+             @False: IF K = 120 [@True]
+                     @True: ~ONFreq(MG, BOX, A [0]);~;
+                     ON ^CS Tone ---> S13
+
+S13,
+    1": OFF ^CS Tone, ^Laser  ---> STOPABORTFLUSH
+
+S.S.3,
+S1,
+    #START: ---> S2
+
+S2,
+    1": ADD P; SHOW 2, Session Time, P ---> S2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

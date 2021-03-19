@@ -1,0 +1,27 @@
+\Optotagging 10sec off - 10sec on for 10 min.
+
+\Outputs
+^Laser = 1
+
+
+S.S.1,
+S1,
+  #START:  ---> S2
+
+S2,
+    10": ON ^Laser; ADD A ---> S3
+
+S3,
+    2": ~ToneOff(MG, BOX);~;
+         OFF ^Laser;
+         IF A < 30 [@T, @F]
+            @T: ---> S2
+            @F: SET A = 0 ---> StopAbortFlush
+
+S.S.2,
+
+S1,
+    #START: ---> S2
+
+S2,
+     1": ADD V; SHOW 1, Session time (sec), V; SHOW 2, Tone Set n/30, A ---> S2

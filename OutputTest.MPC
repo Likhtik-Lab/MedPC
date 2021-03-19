@@ -1,0 +1,13 @@
+\Individual Output Number  Test
+
+\output
+^Laser = 5
+
+S.S.1,
+S1,
+    #START: ON ^Laser ---> S2
+
+S2,
+    5": OFF ^Laser ---> STOPABORTFLUSH
+
+

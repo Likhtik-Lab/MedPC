@@ -1,0 +1,94 @@
+\IN OF
+\Aug. 16 2018
+
+
+
+\Outputs
+^CS Tone = 6
+^HouseLight = 7
+^GridFloor  = 8
+
+^FreqFour    = 0
+^FreqSeven  = 1
+^Amp        = 2
+^RF         = 3
+^Dur        = 4
+
+DIM A = 4
+
+
+\Inter stimulus (CS) intervals
+List Z = 60"
+
+
+
+S.S.1,
+S1,
+        0.001": SET A(^FreqFour) = 3000, A(^Amp)= 100, A(^RF) = 2 , A(^Dur) = 46 ---> SX
+
+
+
+S.S.2,       \ 5 CS trials
+
+S1,
+          #START: ~InitANL926;~;                    \resetting ANL926
+                  ~SetAMP(MG, BOX, A [2]);~;        \initialze amplitude (dB)
+                  ~SetRF(MG, BOX, A [3]);~;         \set Rise and Fall  (msec)
+                  ~SetDur(MG,BOX, A [4]);~;         \set duration of tone (msec)
+                  RANDI B = Z ---> S2
+
+
+S2, \2 minutes until 1st CS+
+     1': SHOW 1, Start to 1st ISI (sec), 60 ---> S3
+
+S3,                                                                                         \first CS plus
+    1": ADD C;
+        IF C < 60 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A[0]);~;
+                     ON ^CS Tone ---> S3
+             @False: IF C = 60 [@True]
+                     @True: ~ONFreq(MG, BOX, A[0]);~;
+                     ON ^CS Tone ---> S4
+S4,
+    1": OFF ^CS Tone; RANDI B = Z  ---> S5
+
+S5,
+     B#T: SHOW 6, 1st ISI (sec), B/100 ---> S6
+
+S6,                                                                                     \second CS plus
+1": ADD F;
+        IF F < 60 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [0]);~;
+                     ON ^CS Tone ---> S6
+             @False: IF F = 60 [@True]
+                     @True: ~ONFreq(MG, BOX, A [0]);~;
+                     ON ^CS Tone ---> S7
+
+S7,
+    1": OFF ^CS Tone; RANDI B = Z ---> S10
+
+
+S8,
+    B#T: SHOW 11, 2nd ISI (sec), B/100 ---> S9
+
+S9,                                                                                    \third CS plus
+       1": ADD I;
+       IF I < 60 [@True, @False]
+            @True: ~ONFreq(MG, BOX, A [0]);~;
+                    ON ^CS Tone ---> S9
+            @False: IF I = 60 [@True]
+                    @True: ~ONFreq(MG, BOX, A [0]);~;
+                    ON ^CS Tone ---> S10
+
+S10,
+   1": OFF ^CS Tone ---> STOPABORTFLUSH
+
+
+
+S.S.3,
+S1,
+    #START: ---> S2
+
+S2,
+    1": ADD P; SHOW 3, Session Time, P ---> S2
+

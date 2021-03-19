@@ -1,0 +1,67 @@
+\Safety Testing Open Field
+\December 1, 2016
+
+\6 min total session, 1 min presentation of safety pips with 1 min of no CS alternating
+\safety pip: 2kHz pips, 50msec each but can be changed to 8kHz in code if needed
+
+\Outputs
+^CS Tone = 6
+^GridFloor = 8
+
+^FreqTwo    = 0
+^FreqEight  = 1
+^Amp        = 2
+^RF         = 3
+^Dur        = 4
+
+DIM A = 4
+
+S.S.1,
+S1,
+  0.001": SET A(^FreqTwo) = 2000, A(^FreqEight) = 8000, A(^Amp)= 100, A(^RF) = 10, A(^Dur) = 0.05 ---> S1
+
+S.S.2,
+S1,
+    #START: ~InitANL926;~;                    \resetting ANL926
+            ~SetAMP(MG, BOX, A [2]);~;        \initialze amplitude (dB)
+            ~SetRF(MG, BOX, A [3]);~;         \set Rise and Fall  (msec)
+            ~SetDur(MG,BOX, A [4]);~;         \set duration of tone (msec)
+             ---> S2
+S2,
+   60": SHOW 1, 1st neutral trial (sec), 60 ---> S3
+
+S3,
+     1": ADD B;
+        IF B <= 60 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [0]);~;
+             ON ^CS Tone; SHOW 6, 1st safety trial (sec), 60 ---> S3
+             @False: OFF ^CS Tone ---> S4
+
+S4,
+    60": SHOW 11, 2nd neutral trial (sec), 60 ---> S5
+
+S5,
+    1": ADD C;
+        IF C <= 60 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [0]);~;
+             ON ^CS Tone; SHOW 16, 2nd safety trial (sec), 60 ---> S5
+             @False: OFF ^CS Tone ---> S6
+
+S6,
+    60": SHOW 21, 3rd neutral trial (sec), 60 ---> S7
+
+S7,
+    1": ADD D;
+        IF D <= 60 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [0]);~;
+             ON ^CS Tone; SHOW 26, 3rd safety trial (sec), 60 ---> S7
+             @False: OFF ^CS Tone ---> STOPABORTFLUSH
+
+
+S.S.3,
+S1,
+    #START: ---> S2
+
+S2,
+    1": ADD E; SHOW 2, Session Time (sec), E ---> S2
+

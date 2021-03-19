@@ -1,0 +1,141 @@
+\STIN
+\Training - Day 3/4
+
+\Subjects receive 5 PAIRED CS-US
+\Light: 30 lux
+
+\Outputs
+^CS Tone Box One = 6
+^CS Tone Box Two = 1
+^GridFloor Box One = 8
+^GridFloor Box Two = 4
+
+^FreqTwo   = 0
+^FreqSeven  = 1
+^Amp        = 2
+^RF         = 3
+^Dur        = 4
+
+DIM A = 4
+
+
+\Inter stimulus (CS) intervals
+List Z = 60", 80", 100", 120"
+
+
+
+S.S.1,
+S1,
+       0.001": SET A(^FreqTwo) = 2000, A(^FreqSeven) = 7000, A(^Amp)= 100, A(^RF) = 2 , A(^Dur) = 46 ---> SX
+
+
+
+S.S.2,       \ 5 CS+ trials
+
+S1,
+          #START: ~InitANL926;~;                    \resetting ANL926
+                  ~SetAMP(MG, BOX, A [2]);~;        \initialze amplitude (dB)
+                  ~SetRF(MG, BOX, A [3]);~;         \set Rise and Fall  (msec)
+                  ~SetDur(MG,BOX, A [4]);~;         \set duration of tone (msec)
+                  RANDI B = Z ---> S2
+
+
+S2, \2 minutes until 1st CS+
+     2': SHOW 1, Start to 1st ISI (sec), 120 ---> S3
+
+S3,                                                                                         \first CS plus
+    1": ADD C;
+        IF C < 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A[0]);~;
+                     ON ^CS Tone Box One, ^CS Tone Box Two ---> S3
+             @False: IF C = 30 [@True]
+                     @True: ~ONFreq(MG, BOX, A[0]);~;
+                     ON ^GridFloor Box One, ^GridFloor Box Two, ^CS Tone Box One, ^CS Tone Box Two   ---> S4
+S4,
+    1": OFF ^GridFloor Box One, ^GridFloor Box Two, ^CS Tone Box One, ^CS Tone Box Two ; RANDI B = Z  ---> S5
+
+S5,
+     B#T: SHOW 6, 1st ISI (sec), B/100 ---> S6
+
+S6,                                                                                     \second CS plus
+1": ADD F;
+        IF F < 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [0]);~;
+                     ON ^CS Tone Box One, ^CS Tone Box Two ---> S6
+             @False: IF F = 30 [@True]
+                     @True: ~ONFreq(MG, BOX, A [0]);~;
+                     ON ^GridFloor Box One, ^GridFloor Box Two, ^CS Tone Box One, ^CS Tone Box Two ---> S7
+
+S7,
+    1": OFF ^GridFloor Box One, ^GridFloor Box Two, ^CS Tone Box One, ^CS Tone Box Two; RANDI B = Z ---> S8
+
+
+S8,
+    B#T: SHOW 11, 2nd ISI (sec), B/100 ---> S9
+
+S9,                                                                                    \third CS plus
+       1": ADD I;
+       IF I < 30 [@True, @False]
+            @True: ~ONFreq(MG, BOX, A [0]);~;
+                    ON ^CS Tone Box One, ^CS Tone Box Two ---> S9
+            @False: IF I = 30 [@True]
+                    @True: ~ONFreq(MG, BOX, A [0]);~;
+                    ON ^GridFloor Box One, ^GridFloor Box Two, ^CS Tone Box One, ^CS Tone Box Two  ---> S10
+
+S10,
+   1": OFF ^GridFloor Box One, ^GridFloor Box Two, ^CS Tone Box One, ^CS Tone Box Two; RANDI B = Z ---> S11
+
+
+S11,
+     B#T: SHOW 16, 3rd ISI (sec), B/100 ---> S12
+
+S12,
+    1": ADD K;                                                                              \fourth CS plus
+        IF K < 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [0]);~;
+                     ON ^CS Tone Box One, ^CS Tone Box Two ---> S12
+             @False: IF K = 30 [@True]
+                     @True: ~ONFreq(MG, BOX, A [0]);~;
+                     ON ^GridFloor Box One, ^GridFloor Box Two, ^CS Tone Box One, ^CS Tone Box Two  ---> S13
+
+S13,
+    1": OFF ^GridFloor Box One, ^GridFloor Box Two, ^CS Tone Box One, ^CS Tone Box Two; RANDI B = Z  ---> S14
+
+
+S14,
+    B#T: SHOW 21, 4th ISI (sec), B/100 ---> S15
+
+S15,
+     1": ADD O;                                                                              \Fifth CS plus
+         IF O < 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A[0]);~;
+                     ON ^CS Tone Box One, ^CS Tone Box Two ---> S15
+             @False: IF O = 30 [@True]
+                     @True: ~ONFreq(MG, Box, A[0]);~;
+                     ON ^GridFloor Box One, ^GridFloor Box Two, ^CS Tone Box One, ^CS Tone Box Two  ---> S16
+
+S16,
+    1": OFF ^GridFloor Box One, ^GridFloor Box Two, ^CS Tone Box One, ^CS Tone Box Two; RANDI B = Z ---> S17
+S17,
+    B#T: SHOW 26, 5th CS+ to END (sec), B/100 ---> STOPABORTFLUSH
+
+S.S.3,
+S1,
+    #START: ---> S2
+
+S2,
+    1": ADD P; SHOW 3, Session Time, P ---> S2
+
+S.S.4,
+    S1,                                          \1st cs      Syntax: SHOW P1,P2,P3 as per page 106 in MED PC Programmer's Manual. Note that P3 cannot contain words such as "plus" or "minus" which is why the pertinent info is completely contained in P2. P3 is negligible
+    0.001": SHOW 2, 2kHz Tone ON (sec), 30 ---> S2
+    S2,                                          \2nd cs
+    0.001": SHOW 7, 2kHz Tone ON (sec), 30  ---> S3
+    S3,                                          \3rd cs
+    0.001": SHOW 12, 2kHz Tone ON (sec), 30 ---> S4
+    S4,                                          \4th cs
+    0.001": SHOW 17, 2kHz Tone ON (sec), 30 ---> S5
+    S5,                                          \5th cs
+    0.001": SHOW 22, 2kHz Tone ON (sec), 30 ---> S6
+    S6,
+    0.001": SHOW 27, Terminating shock during each "Tone ON" CS (sec), 1 ---> SX

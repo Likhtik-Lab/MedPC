@@ -1,0 +1,37 @@
+\Laser Testing
+\June 29th 2018
+
+\3 repetitions of 6 seconds of laser OFF followed by 6 seconds of laser ON.
+
+\Outputs
+^Laser = 5
+
+
+S.S.1,
+
+S1,
+          #START: ---> S2
+S2,
+    20": ON ^Laser ---> S3
+
+S3,
+    20": OFF ^Laser ---> S4
+
+S4,
+    20": ON ^Laser ---> S5
+
+S5,
+    20": OFF ^Laser ---> S6
+
+S6,
+    20": ON ^Laser ---> S7
+
+S7,
+    20": OFF ^Laser ---> S1
+
+S.S.2,
+S1,
+    #START: ---> S2
+
+S2,
+    1": ADD P; SHOW 2, Session Time, P ---> S2

@@ -1,0 +1,11 @@
+
+\Outputs
+^Laser = 6
+
+
+S.S.1,
+S1,
+  #START: ON ^Laser ---> S2
+
+S2,
+    30": OFF ^Laser --->S1

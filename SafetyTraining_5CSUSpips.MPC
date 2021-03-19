@@ -1,0 +1,157 @@
+\Safety Conditioning w/CS pips (2kHZ) *code can be changed to use 8kHz pips
+\Nov 30 2016
+
+
+
+\5CS and 5US unpaired
+\CS: 30 sec of pips, 50 msec/each at 2Hz; (can be changed to 8kHz if needed)
+\inter stimulus intervals of Z seconds from list Z; inter CS-US intervals from List Y
+
+\Outputs
+^CS Tone = 6
+^GridFloor  = 8
+
+
+
+^FreqTwo    = 0
+^FreqEight  = 1
+^Amp        = 2
+^RF         = 3
+^Dur        = 4
+
+DIM A = 4
+
+\Var_Alias Frequency of the Tone (Hz)      = A (0)  \ Default = 2000 Hz
+\Var_Alias Frequency of the Tone (Hz)      = A (1)  \ Default = 8000 Hz
+\Var_Alias Amplitude of the Tone (dB)      = A (2)  \ Default = 100 dB
+\Var_Alias Rise/Fall Time of the Tone (ms) = A (3)  \ Default = 10 ms
+\Var_Alias Tone On Time    (sec)           = A (4)  \ Default = 0.05 seconds
+\Var_Alias Start to 1st CS (sec)           = B      \ Default from List Z
+\Var_Alias 1st to 2nd CS   (sec)           = B      \ Default from List Z
+\Var_Alias 2nd to 3rd CS   (sec)           = B     \ Default from List Z
+\Var_Alias 3rd to 4th CS   (sec)           = B     \ Default from List Z
+\Var_Alias 4th to 5th CS   (sec)           = B      \ Default from List Z
+\Var_Alias 5th to 6th CS   (sec)           = B      \ Default from List Z
+\Var_Alias 6th to 7th CS   (sec)           = B      \ Default from List Z
+\Var_Alias 7th to 8th CS   (sec)           = B      \ Default from List Z
+\Var_Alias 8th to 9th CS   (sec)           = B      \ Default from List Z
+\Var_Alias 9th to 10th CS  (sec)           = B      \ Default from List Z
+\Var_Alias 10th to 11th CS (sec)           = B      \ Default from List Z
+\Var_Alias 11th to 12th CS (sec)           = B      \ Default from List Z
+\Var_Alias 12th to end     (sec)           = B      \ Default from List Z
+\Var_Alias Shock Duration  (sec)           = P      \ Default 1 sec @ 0.6mA
+
+\Inter stimulus (CS) intervals (List Z) & inter CS-US intervals   (List Y)
+List Z = 120", 129", 135", 131", 129", 113", 138", 121", 135", 129", 124", 134", 128", 126", 131", 132", 135", 135", 119", 133", 128", 129", 131"
+
+List Y = 51", 50", 64", 51", 54", 51", 60", 55", 55", 60", 58", 59", 56", 60", 57", 60", 66", 61", 51", 54", 52", 55", 61", 52", 54", 54", 58", 60", 54"
+
+List X = 1"
+
+S.S.1,
+S1,
+    0.001": SET A(^FreqTwo) = 2000, A(^FreqEight) = 8000, A(^Amp)= 100, A(^RF) = 10, A(^Dur) = 0.05 ---> S1
+
+
+S.S.2,
+
+S1,
+          #START: ~InitANL926;~;                    \resetting ANL926
+                  ~SetAMP(MG, BOX, A [2]);~;        \initialze amplitude (dB)
+                  ~SetRF(MG, BOX, A [3]);~;         \set Rise and Fall  (msec)
+                  ~SetDur(MG,BOX, A [4]);~;         \set duration of tone (msec)
+                  RANDI B = Z; RANDI P = X ---> S2
+
+
+S2, \ from List Z
+     B#T: SHOW 1, 1st ISI (sec) , B/100 ---> S3
+
+S3,
+    1": ADD C;
+        IF C < 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A[0]);~;
+                     ON ^CS Tone ---> S3
+             @False: IF C = 30 [@True]
+                     @True: ~ONFreq(MG, BOX, A[0]);~;
+                     OFF ^CS Tone;
+                     RANDI Q = Y; RANDI B = Z ---> S4
+
+S4,   \from list Y
+    Q#T: SHOW 2, 1st CS-US Interval (sec), Q/100; ON ^GridFloor ---> S5
+
+S5,
+    P#T: OFF ^GridFloor; SET H = B - Q ---> S6
+
+
+S6,
+    H#T: SHOW 6, 2nd ISI (sec), H/100  ---> S7
+
+S7,
+       1": ADD D;
+        IF D <= 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [0]);~;
+             ON ^CS Tone ---> S7
+             @False: OFF ^CS Tone; RANDI B = Z; RANDI Q = Y ---> S8
+S8,
+    Q#T: SHOW 7, 2nd CS-US Interval (sec), Q/100; ON ^GridFloor ---> S9
+
+S9,
+    P#T: OFF ^GridFloor; SET I = B - Q ---> S10
+
+S10,
+    I#T: SHOW 11, 3rd ISI (sec), I/100  ---> S11
+
+S11,
+    1": ADD E;
+        IF E <= 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [0]);~;
+                 ON ^CS Tone ---> S11
+             @False: OFF ^CS Tone; RANDI B = Z; RANDI Q = Y ---> S12
+
+S12,
+    Q#T: SHOW 12, 3rd CS-US Interval (sec), Q/100; ON ^GridFloor ---> S13
+
+S13,
+    P#T: OFF ^GridFloor; SET J = B - Q ---> S14
+
+S14,
+    J#T: SHOW 16, 4th ISI (sec), J/100 ---> S15
+
+
+S15,
+    1": ADD F;
+        IF F <= 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [0]);~;
+                 ON ^CS Tone ---> S15
+             @False: OFF ^CS Tone; RANDI B = Z; RANDI Q = Y ---> S16
+
+S16,
+    Q#T: SHOW 17, 4th CS-US Interval (sec), Q/100; ON ^GridFloor ---> S17
+
+S17,
+    P#T: OFF ^GridFloor; SET K = B - Q ---> S18
+
+S18,
+     K#T: SHOW 21, 5th ISI (sec), K/100 ---> S19
+
+S19,
+ 1": ADD G;
+        IF G <= 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [0]);~;
+                 ON ^CS Tone ---> S19
+             @False: OFF ^CS Tone; RANDI B = Z; RANDI Q = Y ---> S20
+S20,
+    Q#T: SHOW 22, 5th CS-US Interval (sec), Q/100; ON ^GridFloor ---> S21
+
+S21,
+    P#T: OFF ^GridFloor; SET L = B - Q ---> S22
+
+S22,
+    L#T: SHOW 21, END (sec), L/100 ---> STOPABORTFLUSH
+
+S.S.4,
+
+S1,
+    #START: ---> S2
+S2,
+    1": ADD M; SHOW 3, Session Time (sec), M ---> S2

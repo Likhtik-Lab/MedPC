@@ -1,0 +1,49 @@
+\Laser Testing
+\June 29th 2018
+
+\3 repetitions of 6 seconds of laser OFF followed by 6 seconds of laser ON.
+
+\Outputs
+^Laser = 5
+
+
+S.S.1,
+
+S1,
+          #START: ---> S2
+S2,
+    6": ON ^Laser ---> S3
+
+S3,
+    6": OFF ^Laser ---> S4
+
+S4,
+    6": ON ^Laser ---> S5
+
+S5,
+    6": OFF ^Laser ---> S6
+
+S6,
+    6": ON ^Laser ---> S7
+
+S7,
+    6": OFF ^Laser ---> S8
+
+S8,
+    6": ON ^Laser ---> S9
+
+S9,
+    6": OFF ^Laser ---> S10
+
+S10,
+    6": ON ^Laser ---> S11
+
+S11,
+    6": OFF ^Laser ---> STOPABORTFLUSH
+
+S.S.2,
+S1,
+    #START: ---> S2
+
+S2,
+    1": ADD P; SHOW 2, Session Time, P ---> S2

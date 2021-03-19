@@ -1,0 +1,31 @@
+\Innate Anxiety Laser Trials
+\February, 2020
+
+\2 repetitions of 120 seconds of laser OFF followed by 120 seconds of laser ON. Total time is 8 minutes
+
+\Outputs
+^Laser = 1
+
+
+S.S.1,
+
+S1,
+          #START: ---> S2
+S2,
+    120": ON ^Laser ---> S3
+
+S3,
+    120": OFF ^Laser ---> S4
+
+S4,
+    120": ON ^Laser ---> S5
+
+S5,
+    120": OFF ^Laser ---> STOPABORTFLUSH
+
+S.S.2,
+S1,
+    #START: ---> S2
+
+S2,
+    1": ADD P; SHOW 2, Session Time, P ---> S2

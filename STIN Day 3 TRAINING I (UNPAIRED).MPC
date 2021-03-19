@@ -1,0 +1,139 @@
+\Aug 30, 2017
+\Sandra Talbot . Itzik Nahmoud (STIN)
+\Training I - Day 3
+
+\Subjects receive 5 UNPAIRED CS-US
+\Light: 30 lux
+
+
+\Outputs
+^CS Tone Box One = 6
+^CS Tone Box Two = 1
+^HouseLight Box One = 7
+^HouseLight Box Two = 2
+^GridFloor Box One = 8
+^GridFloor Box Two = 4
+
+
+^FreqTwo    = 0
+^FreqEight  = 1
+^Amp        = 2
+^RF         = 3
+^Dur        = 4
+
+DIM A = 4
+
+\Inter stimulus (CS) intervals (List Z) & inter CS-US intervals   (List Y)
+List Z = 120", 129", 135", 131", 129", 113", 138", 121", 135", 129", 124", 134", 128", 126", 131", 132", 135", 135", 119", 133", 128", 129", 131"
+
+List Y = 51", 50", 64", 51", 54", 51", 60", 55", 55", 60", 58", 59", 56", 60", 57", 60", 66", 61", 51", 54", 52", 55", 61", 52", 54", 54", 58", 60", 54"
+
+List X = 1"
+
+S.S.1,
+S1,
+    0.001": SET A(^FreqTwo) = 2000, A(^FreqEight) = 8000, A(^Amp)= 100, A(^RF) = 2, A(^Dur) = 46 ---> S1
+
+
+S.S.2,
+
+S1,
+          #START: ~InitANL926;~;                    \resetting ANL926
+                  ~SetAMP(MG, BOX, A [2]);~;        \initialze amplitude (dB)
+                  ~SetRF(MG, BOX, A [3]);~;         \set Rise and Fall  (msec)
+                  ~SetDur(MG,BOX, A [4]);~;         \set duration of tone (msec)
+                  RANDI B = Z; RANDI P = X ---> S2
+
+
+S2, \ from List Z
+     B#T: SHOW 1, 1st ISI (sec) , B/100 ---> S3
+
+S3,
+    1": ADD C;
+        IF C < 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A[0]);~;
+                     ON ^CS Tone Box One, ^CS Tone Box Two, ^HouseLight Box One, ^HouseLight Box Two   ---> S3
+             @False: IF C = 30 [@True]
+                     @True: ~ONFreq(MG, BOX, A[0]);~;
+                     OFF ^CS Tone Box One, ^CS Tone Box Two, ^HouseLight Box One, ^HouseLight Box Two;
+                     RANDI Q = Y; RANDI B = Z ---> S4
+
+S4,   \from list Y
+    Q#T: SHOW 2, 1st CS-US Interval (sec), Q/100; ON ^GridFloor Box One, ^GridFloor Box Two ---> S5
+
+S5,
+    P#T: OFF ^GridFloor Box One, ^GridFloor Box Two ; SET H = B - Q ---> S6
+
+
+S6,
+    H#T: SHOW 6, 2nd ISI (sec), H/100  ---> S7
+
+S7,
+       1": ADD D;
+        IF D <= 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [0]);~;
+             ON ^CS Tone Box One, ^CS Tone Box Two, ^HouseLight Box One, ^HouseLight Box Two ---> S7
+             @False: OFF ^CS Tone Box One, ^CS Tone Box Two, ^HouseLight Box One, ^HouseLight Box Two; RANDI B = Z; RANDI Q = Y ---> S8
+S8,
+    Q#T: SHOW 7, 2nd CS-US Interval (sec), Q/100; ON ^GridFloor Box One, ^GridFloor Box Two ---> S9
+
+S9,
+    P#T: OFF ^GridFloor Box One, ^GridFloor Box Two; SET I = B - Q ---> S10
+
+S10,
+    I#T: SHOW 11, 3rd ISI (sec), I/100  ---> S11
+
+S11,
+    1": ADD E;
+        IF E <= 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [0]);~;
+                 ON ^CS Tone Box One, ^CS Tone Box Two, ^HouseLight Box One, ^HouseLight Box Two ---> S11
+             @False: OFF ^CS Tone Box One, ^CS Tone Box Two, ^HouseLight Box One, ^HouseLight Box Two; RANDI B = Z; RANDI Q = Y ---> S12
+
+S12,
+    Q#T: SHOW 12, 3rd CS-US Interval (sec), Q/100; ON ^GridFloor Box One, ^GridFloor Box Two ---> S13
+
+S13,
+    P#T: OFF ^GridFloor Box One, ^GridFloor Box Two; SET J = B - Q ---> S14
+
+S14,
+    J#T: SHOW 16, 4th ISI (sec), J/100 ---> S15
+
+
+S15,
+    1": ADD F;
+        IF F <= 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [0]);~;
+                 ON ^CS Tone Box One, ^CS Tone Box Two, ^HouseLight Box One, ^HouseLight Box Two ---> S15
+             @False: OFF ^CS Tone Box One, ^CS Tone Box Two, ^HouseLight Box One, ^HouseLight Box Two; RANDI B = Z; RANDI Q = Y ---> S16
+
+S16,
+    Q#T: SHOW 17, 4th CS-US Interval (sec), Q/100; ON ^GridFloor Box One, ^GridFloor Box Two ---> S17
+
+S17,
+    P#T: OFF ^GridFloor Box One, ^GridFloor Box Two; SET K = B - Q ---> S18
+
+S18,
+     K#T: SHOW 21, 5th ISI (sec), K/100 ---> S19
+
+S19,
+ 1": ADD G;
+        IF G <= 30 [@True, @False]
+             @True: ~ONFreq(MG, BOX, A [0]);~;
+                 ON ^CS Tone Box One, ^CS Tone Box Two, ^HouseLight Box One, ^HouseLight Box Two ---> S19
+             @False: OFF ^CS Tone Box One, ^CS Tone Box Two, ^HouseLight Box One, ^HouseLight Box Two; RANDI B = Z; RANDI Q = Y ---> S20
+S20,
+    Q#T: SHOW 22, 5th CS-US Interval (sec), Q/100; ON ^GridFloor Box One, ^GridFloor Box Two ---> S21
+
+S21,
+    P#T: OFF ^GridFloor Box One, ^GridFloor Box Two; SET L = B - Q ---> S22
+
+S22,
+    L#T: SHOW 21, END (sec), L/100 ---> STOPABORTFLUSH
+
+S.S.4,
+
+S1,
+    #START: ---> S2
+S2,
+    1": ADD M; SHOW 3, Session Time (sec), M ---> S2

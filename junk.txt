@@ -1,0 +1,146 @@
+\Differential Fear Conditioning Phase 1
+\August 18, 2016
+
+\Differential Fear Conditioning Phase 1.mpc
+
+\12 trials, CS+/CS-, CS+ co-delivered with 1 sec shock
+\CS+: 2kHz pips, 30 sec of pips, 50 msec/each at 1Hz; CS-:8kHz pips, 30 sec of pips, 50 msec/each at 1kHz
+\inter stimulus intervals of 60, 90, 120 seconds from listZ
+
+
+\Outputs
+^HouseLight = 7
+^GridFloor = 8
+
+\Control Variables
+Var_Alias Start to 1st CS (sec)    = B  \ Default from List Z
+Var_Alias 1st to 2nd CS   (sec)    = C  \ Default from List Z
+Var_Alias 2nd to 3rd CS   (sec)    = D  \ Default from List Z
+Var_Alias 3rd to 4th CS   (sec)    = E  \ Default from List Z
+Var_Alias 4th to 5th CS   (sec)    = F  \ Default from List Z
+Var_Alias 5th to 6th CS   (sec)    = G  \ Default from List Z
+Var_Alias 6th to 7th CS   (sec)    = H  \ Default from List Z
+Var_Alias 7th to 8th CS   (sec)    = I  \ Default from List Z
+Var_Alias 8th to 9th CS   (sec)    = J  \ Default from List Z
+Var_Alias 9th to 10th CS  (sec)    = K  \ Default from List Z
+Var_Alias 10th to 11th CS (sec)    = L  \ Default from List Z
+Var_Alias 11th to 12th CS (sec)    = M  \ Default from List Z
+Var_Alias 12th to end     (sec)    = N  \ Default from List Z
+
+
+
+\Inter stimulus (CS) intervals
+List Z = 60, 90, 120
+
+
+
+
+
+
+
+S.S.1,      \Set Inter stimulus intervals from List Z
+S1,
+0.001": RANDI B = Z; ON B ---> S2
+S2,
+0.005": OFF B ---> S3
+S3,
+0.001": RANDI C = Z; ON C ---> S4
+S4,
+0.005": OFF C ---> S5
+S5,
+0.001": RANDI D = Z; ON D ---> S6
+S6,
+0.005": OFF D ---> S7
+S7,
+0.001": RANDI E = Z; ON E ---> S8
+S8,
+0.005": OFF E ---> S9
+S9,
+0.001": RANDI F = Z; ON F ---> S10
+S10,
+0.005": OFF F  ---> S11
+S11,
+0.001": RANDI G = Z; ON G ---> S12
+S12,
+0.005": OFF G   ---> S13
+S13,
+0.001": RANDI H = Z; ON H ---> S14
+S14,
+0.005": OFF H ---> S15
+S15,
+0.001": RANDI I = Z; ON I  ---> S16
+S16,
+0.005": OFF I ---> S17
+S17,
+0.001": RANDI K = Z; ON K  ---> S18
+S18,
+0.005": OFF K   ---> S19
+S19,
+0.001": RANDI L = Z; ON L ---> S20
+S20,
+0.005": OFF L ---> S21
+S21,
+0.001": RANDI M = Z; ON M ---> S22
+S22,
+0.005": OFF M ---> S23
+S23,
+0.001": RANDI N = Z; ON N ---> S24
+S24,
+0.005": OFF N ---> SX
+
+
+S.S.2,        \Turn on houselight, Set non List variables, convert all variables to seconds
+S1,
+#START: ON ^HouseLight ---> S2
+
+S2,
+#START: SET B = B * 1", C = C * 1", D = D * 1", E = E * 1", F = F * 1", G = G * 1", H = H * 1", I = I * 1",
+J = J * 1", K = K * 1", L = L * 1", M = M * 1", N = N * 1", S = S * 1" ---> S3
+
+S3,     \Turn on CS+ after B seconds
+B#T:  %CS+ Activation% ---> S4
+
+S4,     \Turn on CS- after C seconds
+C#T:  %CS- Activation% ---> S5
+
+S5,     \Turn on CS- after D seconds
+D#T:  %CS- Activation% ---> S6
+
+S6,    \Turn on CS+ after E seconds
+E#T:  %CS+ Activation% ---> S7
+
+S7,    \Turn on CS- after F seconds
+F#T:  %CS- Activation% ---> S8
+
+S8,    \Turn on CS+ after G seconds
+G#T:  %CS+ Activation% ---> S9
+
+S9,    \Turn on CS- after H seconds
+H#T:   %CS- Activation% ---> S10
+
+S10,    \Turn on CS+ after I seconds
+I#T:  %CS+ Activation% ---> S11
+
+S11,    \Turn on CS- after J seconds
+J#T:  %CS- Activation% ---> S12
+
+S12,    \Turn on CS- after K seconds
+K#T:  %CS- Activation% ---> S13
+
+S13,    \Turn on CS+ after L seconds
+L#T:   %CS+ Activation% ---> S14
+
+S14,    \Turn on CS+ after M seconds
+M#T:  %CS+ Activation% ---> S15
+
+S15,    \Last CS to End of Program after N seconds
+N#T:  OFF ^HouseLight ---> STOPABORTFLUSH
+
+S.S.3,
+S1,
+#START: SHOW 2, Time to CS1 (sec), B, 3, Time to CS2 (sec), C, 4, Time to CS3 (sec), D, 5, Time to CS4 (sec), E, 6, Time to CS5 (sec), F,
+7, Time to CS6 (sec), G, 8, Time to CS7 (sec), H, 9, Time to CS8 (sec),I, 10, Time to CS9 (sec), J, 11, Time to CS10 (sec), K, 12, Time to CS11 (sec), L,
+13, Time to CS12 (sec), M, 14, Time to End (sec), N ---> S2
+
+S2,
+1": ADD S; SHOW 1, Session Time (sec), S; ---> S2
